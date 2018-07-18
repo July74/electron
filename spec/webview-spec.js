@@ -1153,6 +1153,18 @@ describe('<webview> tag', function () {
   })
 
   describe('will-attach-webview event', () => {
+    it('does not emit when src is not changed', (done) => {
+      loadWebView(webview)
+      setTimeout(() => {
+        const expectedErrorMessage =
+            'Cannot call stop because the webContents is unavailable. ' +
+            'The WebView must be attached to the DOM ' +
+            'and the dom-ready event emitted before this method can be called.'
+        expect(() => { webview.stop() }).to.throw(expectedErrorMessage)
+        done()
+      })
+    })
+
     it('supports changing the web preferences', (done) => {
       ipcRenderer.send('disable-node-on-next-will-attach-webview')
       webview.addEventListener('console-message', (event) => {
